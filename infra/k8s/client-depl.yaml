@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec: #describe how this deployment has to behave
+  replicas: 1 
+  selector: 
+    matchLabels: #define how the deployment find the pods that it supposed to manage
+      app: client
+  template: #describes how every pods created by this deployment has to behave
+    metadata: #define how the deployment find the pods that it supposed to manage
+      labels:
+        app: client
+    spec: #describe how every pod should behave
+      containers: #every pod has a container section
+        - name: client #creates a container named "client"
+          image: mishli/cs-client #which docker image it has to run, if using google cloud it should be like gcr.something..
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  selector: #define how the service gonna find the pods that it going to govern request to
+    app: client
+  ports:
+    - name: client #the name here is not important, good for logs
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
